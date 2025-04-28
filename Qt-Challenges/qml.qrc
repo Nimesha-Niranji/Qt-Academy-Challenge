@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>Image/id.jfif</file>
     </qresource>
 </RCC>
