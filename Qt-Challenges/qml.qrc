@@ -2,5 +2,28 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Image/id.jfif</file>
+        <file>Assets/Button-Pedal.png</file>
+        <file>Assets/Button-Pedal@2x.png</file>
+        <file>Assets/Button-Pedal-Checked.png</file>
+        <file>Assets/Button-Pedal-Checked@2x.png</file>
+        <file>Assets/Guitar-Pedal-Background.png</file>
+        <file>Assets/Guitar-Pedal-Background@2x.png</file>
+        <file>Assets/Knob-Dial.png</file>
+        <file>Assets/Knob-Dial@2x.png</file>
+        <file>Assets/Knob-Markings.png</file>
+        <file>Assets/Knob-Markings@2x.png</file>
+        <file>Assets/LED.png</file>
+        <file>Assets/LED@2x.png</file>
+        <file>Assets/LED-Checked.png</file>
+        <file>Assets/LED-Checked@2x.png</file>
+        <file>Assets/Screw.png</file>
+        <file>Assets/Screw@2x.png</file>
+        <file>Assets/Switch.png</file>
+        <file>Assets/Switch@2x.png</file>
+        <file>Assets/Switch-Checked.png</file>
+        <file>Assets/Switch-Checked@2x.png</file>
+        <file>Fonts/OFL.txt</file>
+        <file>Fonts/Prisma.ttf</file>
+        <file>Fonts/RussoOne-Regular.ttf</file>
     </qresource>
 </RCC>
