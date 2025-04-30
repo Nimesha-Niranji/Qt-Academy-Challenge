@@ -25,5 +25,27 @@
         <file>Fonts/OFL.txt</file>
         <file>Fonts/Prisma.ttf</file>
         <file>Fonts/RussoOne-Regular.ttf</file>
+        <file>Image/tv/cast_connected.svg</file>
+        <file>Image/tv/cast_white.svg</file>
+        <file>Image/tv/closed_caption.svg</file>
+        <file>Image/tv/closed_caption_white.svg</file>
+        <file>Image/tv/fast_forward.svg</file>
+        <file>Image/tv/fast_rewind.svg</file>
+        <file>Image/tv/hdr_on.svg</file>
+        <file>Image/tv/hdr_on_white.svg</file>
+        <file>Image/tv/mic.svg</file>
+        <file>Image/tv/mic_white.svg</file>
+        <file>Image/tv/minus.svg</file>
+        <file>Image/tv/play_pause.svg</file>
+        <file>Image/tv/plus.svg</file>
+        <file>Image/tv/power.svg</file>
+        <file>Image/tv/settings.svg</file>
+        <file>Image/tv/speaker.svg</file>
+        <file>Image/tv/speaker_muted.svg</file>
+        <file>Image/tv/speaker_muted_white.svg</file>
+        <file>Image/tv/volume_down.svg</file>
+        <file>Image/tv/volume_up.svg</file>
+        <file>Fonts/Silkscreen/Silkscreen-Bold.ttf</file>
+        <file>Fonts/Silkscreen/Silkscreen-Regular.ttf</file>
     </qresource>
 </RCC>

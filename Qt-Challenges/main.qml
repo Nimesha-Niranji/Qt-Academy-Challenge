@@ -4,15 +4,15 @@ import QtQuick.Controls
 
 Window {
     id: root
-    width: 640
-    height: 360
+    width: 240
+    height: 740
     visible: true
-    title: qsTr("Business card")
+    title: qsTr("TV Remote Control")
 
     StackView {
         id: stackView
         anchors.fill: parent
-        initialItem: businessCardPage
+        initialItem: tvRemotePage
     }
 
     component ContactInfo: QtObject {
@@ -41,174 +41,213 @@ Window {
     }
 
     Component{
-        id: businessCardPage
+        id: tvRemotePage
+        Rectangle{
+            id: rectangle3
+            color: "Black"
+            property color themeColor: "silver"
 
-        Rectangle {
-            id: rectangle1
-            color: "white"
+            component BorderGradient: Rectangle {
+                id: borderGradientRectangle
 
-            Rectangle {
-                id: boarderRectangle
-                width: rectangle1.width
-                height: width / 1.586
-                color: "transparent"
-                border.color: "black"
-                border.width: 2
-                radius: 10
+                // BorderGradient:
+                // A simple Rectangle with a 2-color gradient
 
-                anchors {
-                    fill: parent
-                    margins: 10
+                // We use the Rectangle's own color property as
+                // the first gradient stop color (so we upgrade the
+                // color property to a required property)
+                property color color2: borderGradientRectangle.color.darker()
+
+                color: rectangle3.themeColor
+
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0
+                        color: borderGradientRectangle.color
+                    }
+                    GradientStop {
+                        position: 1
+                        color: borderGradientRectangle.color2
+                    }
+                }
+            }
+
+            component DoubleBorderGradient: BorderGradient {
+                id: doubleBorderGradient
+
+                // DoubleBorderGradient:
+                // A BorderGradient with another one nested inside
+                // with a specified innerMargin
+
+                property int innerMargin: 2
+
+                BorderGradient {
+                    // inner gradient
+                    anchors {
+                        fill: parent
+                        margins: doubleBorderGradient.innerMargin
+                    }
+
+                    radius: doubleBorderGradient.radius - doubleBorderGradient.innerMargin
+
+                    // swap the colors around
+                    color: doubleBorderGradient.color2
+                    color2: doubleBorderGradient.color
+                }
+            }
+
+            component Button1: DoubleBorderGradient {
+                id: button
+
+                // Button:
+                // A clickable DoubleBorderGradient with a useful
+                // clicked signal and a pressed property alias
+
+                readonly property alias pressed: tapHandler.pressed
+                signal clicked
+
+                implicitWidth: 100
+                implicitHeight: 40
+
+                radius: Math.min(width, height) / 2
+
+                color: tapHandler.pressed ? rectangle3.themeColor : rectangle3.themeColor.darker()
+                color2: tapHandler.pressed ? rectangle3.themeColor.darker() : rectangle3.themeColor
+
+                TapHandler {
+                    id: tapHandler
+                    gesturePolicy: TapHandler.WithinBounds
+                    onTapped: button.clicked()
+                }
+            }
+
+            component CircleButton: Button1 {
+                id: circleButton
+
+                // CircleButton:
+                // A circular Button for convenience
+
+                width: 200
+                height: width // a circle
+
+                // The CircleButton uses Item's containmentMask
+                // property to return the boolean result of a
+                // simplified test to check if the point is inside
+                // the circle or not.
+                containmentMask: QtObject {
+                    function contains(clickPoint: point) : bool {
+                        return (Math.pow(clickPoint.x - circleButton.radius, 2) +
+                                Math.pow(clickPoint.y - circleButton.radius, 2))
+                                < Math.pow(circleButton.radius, 2)
+                    }
+                }
+            }
+
+            QtObject {
+                id: tvControl
+
+                // The tvControl object is provided for you to use as a
+                // mock back-end providing a number of typical properties
+                // and features you might find on a remote control.
+                // There are even 5 channels with sample channelNames.
+
+                property int channelNumber: 0
+                readonly property string channelName: channelNames[channelNumber]
+
+                // TV Features
+                property bool closedCaptionsEnabled: true
+                property bool hdrEnabled: true
+                property bool castConnected: true
+                property bool listening: false
+                property bool muted: false
+                property real volume: 0.75
+                readonly property bool soundOn: !muted && volume > 0
+
+                function incrementVolume() {
+                    volume = Math.min(1, volume + 0.1)
                 }
 
-                Item {
-                    id: boarderItem
-                    anchors.fill: parent
-                    anchors.margins: boarderRectangle.radius
+                function decrementVolume() {
+                    volume = Math.max(0, volume - 0.1)
+                }
 
-                    Rectangle {
-                        id: photoFrame
-                        width: 150
-                        height: width
-                        color: "transparent"
-                        border.color: "black"
-                        border.width: 2
-                        radius: 5
-                        anchors.right: parent.right
-                        Image {
-                            id: idPhoto
-                            source: "qrc:/Image/id.jfif"
-                            anchors.fill: parent
-                            anchors.margins: photoFrame.radius
-                            fillMode: Image.PreserveAspectFit
-                        }
-                    }
+                function incrementChannel() {
+                    channelNumber = Math.min(channelNames.length - 1, channelNumber + 1)
+                }
+
+                function decrementChannel() {
+                    channelNumber = Math.max(0, channelNumber - 1)
+                }
+
+                property list<string> channelNames: [
+                    "News Station",
+                    "Comedy Cable",
+                    "Eats and Beats",
+                    "Weather",
+                    "Cartoons",
+                    "Reality TV"
+                ]
+            }
+
+            // Here we provide a suggested remote control background
+            DoubleBorderGradient {
+                id: remoteControlBackground
+
+                anchors.fill: parent
+                innerMargin: 8
+                radius: 40
+            }
+
+            // As a demonstration of one of the Button types,
+            // we add a power button.
+            CircleButton {
+                id: powerButton
+
+                anchors {
+                    top: parent.top
+                    right: parent.right
+                    topMargin: 20
+                    rightMargin: 20
+                }
+                width: 40
+                height: 40
+                color: "darkred"
+
+                onClicked: root.close()
+
+                Image {
+                    width: 20
+                    height: 20
+                    source: "qrc:/Image/tv/power.svg"
+                    anchors.centerIn: parent
+                    fillMode: Image.PreserveAspectFit
+                }
+            }
+
+            DoubleBorderGradient{
+                id: lcdScreen
+                anchors{
+                    top: powerButton.bottom
+                    left: parent.left
+                    right: parent.right
+                    margins: 20
+                }
+                height: 100
+                radius: 8
+                color: "#93AA4B"
+                innerMargin: 1
+
+                Item {
+                    id: lcdContentItem
+                    anchors.fill: parent
+                    anchors.margins: 10
 
                     Text {
-                        id: nameText
-                        text: myContactInfor.name
-                        font {
-                            pixelSize: 40
-                            weight: Font.Bold
-                            capitalization: "AllUppercase"
-                        }
-                    }
-
-                    Item {
-                        id: basicInfo
-                        visible: !detailsButton.checked
-                        anchors {
-                            top: nameText.bottom
-                            topMargin: 10
-                            left: parent.left
-                            right: parent.right
-                            bottom: parent.bottom
-                        }
-
-                        Text {
-                            id: occupationtext
-                            text: myContactInfor.occupation
-                            font.pixelSize: 25
-                        }
-                        Text {
-                            id: companyText
-                            text: myContactInfor.company
-                            font.pixelSize: 25
-                            anchors.top: occupationtext.bottom
-                            anchors.topMargin: 10
-                        }
-                    }
-
-                    Item {
-                        id: detailInfo
-                        visible: detailsButton.checked
-
-                        anchors {
-                            top: nameText.bottom
-                            topMargin: 10
-                            left: parent.left
-                            right: parent.right
-                            bottom: parent.bottom
-                        }
-                        Text {
-                            id: addresstext
-                            text: myContactInfor.address
-                            font.pixelSize: 25
-                        }
-                        Text {
-                            id: countryText
-                            text: myContactInfor.country
-                            font.pixelSize: 25
-                            anchors {
-                                top: addresstext.bottom
-                                topMargin: 10
-                            }
-                        }
-                        Text {
-                            id: phoneText
-                            text: myContactInfor.phone
-                            font.pixelSize: 25
-                            anchors {
-                                top: countryText.bottom
-                                topMargin: 10
-                            }
-                        }
-                        Text {
-                            id: emailText
-                            text: myContactInfor.email
-                            font.pixelSize: 25
-                            anchors {
-                                top: phoneText.bottom
-                                topMargin: 10
-                            }
-                        }
-                        Text {
-                            id: urtText
-                            text: myContactInfor.webSite
-                            font.pixelSize: 25
-                            anchors {
-                                top: emailText.bottom
-                                topMargin: 10
-                            }
-                        }
-                    }
-
-                    Rectangle {
-
-                        property bool checked: false
-                        property bool checkable: true
-                        signal clicked
-                        id: detailsButton
-                        width: 120
-                        height: 40
-                        border.color: "Black"
-                        border.width: 1.75
-                        radius: height / 2
-                        anchors.bottom: parent.bottom
-
-                        color: detailsButton.checked
-                               || tapHandler.pressed ? "white" : "black"
-
-                        //border.color: detailsButton.checked || tapHandler.pressed ? "black" : "white"
-                        Text {
-                            id: detailText
-                            text: "Details"
-                            font.pixelSize: 17
-                            anchors.centerIn: parent
-                            color: detailsButton.checked
-                                   || tapHandler.pressed ? "black" : "white"
-                        }
-
-                        TapHandler {
-                            id: tapHandler
-
-                            onTapped: {
-                                if (detailsButton.checkable) {
-                                    detailsButton.checked = !detailsButton.checked
-                                }
-
-                                detailsButton.clicked()
-                            }
+                        id: chanelNo
+                        text: qsTr("CHANNEL")
+                        anchors{
+                            top: lcdScreen
+                            //leftMargin: 30
                         }
                     }
                 }
@@ -228,7 +267,6 @@ Window {
                 }
             }
         }
-
     }
 
     Component{
@@ -241,12 +279,12 @@ Window {
 
             FontLoader{
                 id: russoFontLoader
-                source: ":/Fonts/RussoOne-Regular.ttf"
+                source: "qrc:/Fonts/RussoOne-Regular.ttf"
             }
 
             FontLoader{
                 id: prismaFontLoader
-                source: ":/Fonts/Prisma.ttf"
+                source: "qrc:/Fonts/Prisma.ttf"
             }
 
             Image{
@@ -492,6 +530,199 @@ Window {
                 y: 67 - height / 2
                 text: qsTr("LEVEL")
             }
+
+            Button {
+                text: "Next"
+                anchors.bottom: parent.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                onClicked: {
+                    root.title = qsTr("Business Card")    // <- Change title
+                    root.minimumWidth = 640                         // <- Change width
+                    root.minimumHeight = 360                        // <- Change height
+                    root.maximumWidth = minimumWidth
+                    root.maximumHeight = minimumHeight                  // <- Change height
+                    stackView.push(businessCardPage)
+                }
+            }
         }
     }
+
+    Component{
+        id: businessCardPage
+
+        Rectangle {
+            id: rectangle1
+            color: "white"
+
+            Rectangle {
+                id: boarderRectangle
+                width: rectangle1.width
+                height: width / 1.586
+                color: "transparent"
+                border.color: "black"
+                border.width: 2
+                radius: 10
+
+                anchors {
+                    fill: parent
+                    margins: 10
+                }
+
+                Item {
+                    id: boarderItem
+                    anchors.fill: parent
+                    anchors.margins: boarderRectangle.radius
+
+                    Rectangle {
+                        id: photoFrame
+                        width: 150
+                        height: width
+                        color: "transparent"
+                        border.color: "black"
+                        border.width: 2
+                        radius: 5
+                        anchors.right: parent.right
+                        Image {
+                            id: idPhoto
+                            source: "qrc:/Image/id.jfif"
+                            anchors.fill: parent
+                            anchors.margins: photoFrame.radius
+                            fillMode: Image.PreserveAspectFit
+                        }
+                    }
+
+                    Text {
+                        id: nameText
+                        text: myContactInfor.name
+                        font {
+                            pixelSize: 40
+                            weight: Font.Bold
+                            capitalization: "AllUppercase"
+                        }
+                    }
+
+                    Item {
+                        id: basicInfo
+                        visible: !detailsButton.checked
+                        anchors {
+                            top: nameText.bottom
+                            topMargin: 10
+                            left: parent.left
+                            right: parent.right
+                            bottom: parent.bottom
+                        }
+
+                        Text {
+                            id: occupationtext
+                            text: myContactInfor.occupation
+                            font.pixelSize: 25
+                        }
+                        Text {
+                            id: companyText
+                            text: myContactInfor.company
+                            font.pixelSize: 25
+                            anchors.top: occupationtext.bottom
+                            anchors.topMargin: 10
+                        }
+                    }
+
+                    Item {
+                        id: detailInfo
+                        visible: detailsButton.checked
+
+                        anchors {
+                            top: nameText.bottom
+                            topMargin: 10
+                            left: parent.left
+                            right: parent.right
+                            bottom: parent.bottom
+                        }
+                        Text {
+                            id: addresstext
+                            text: myContactInfor.address
+                            font.pixelSize: 25
+                        }
+                        Text {
+                            id: countryText
+                            text: myContactInfor.country
+                            font.pixelSize: 25
+                            anchors {
+                                top: addresstext.bottom
+                                topMargin: 10
+                            }
+                        }
+                        Text {
+                            id: phoneText
+                            text: myContactInfor.phone
+                            font.pixelSize: 25
+                            anchors {
+                                top: countryText.bottom
+                                topMargin: 10
+                            }
+                        }
+                        Text {
+                            id: emailText
+                            text: myContactInfor.email
+                            font.pixelSize: 25
+                            anchors {
+                                top: phoneText.bottom
+                                topMargin: 10
+                            }
+                        }
+                        Text {
+                            id: urtText
+                            text: myContactInfor.webSite
+                            font.pixelSize: 25
+                            anchors {
+                                top: emailText.bottom
+                                topMargin: 10
+                            }
+                        }
+                    }
+
+                    Rectangle {
+
+                        property bool checked: false
+                        property bool checkable: true
+                        signal clicked
+                        id: detailsButton
+                        width: 120
+                        height: 40
+                        border.color: "Black"
+                        border.width: 1.75
+                        radius: height / 2
+                        anchors.bottom: parent.bottom
+
+                        color: detailsButton.checked
+                               || tapHandler.pressed ? "white" : "black"
+
+                        //border.color: detailsButton.checked || tapHandler.pressed ? "black" : "white"
+                        Text {
+                            id: detailText
+                            text: "Details"
+                            font.pixelSize: 17
+                            anchors.centerIn: parent
+                            color: detailsButton.checked
+                                   || tapHandler.pressed ? "black" : "white"
+                        }
+
+                        TapHandler {
+                            id: tapHandler
+
+                            onTapped: {
+                                if (detailsButton.checkable) {
+                                    detailsButton.checked = !detailsButton.checked
+                                }
+
+                                detailsButton.clicked()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+
 }
