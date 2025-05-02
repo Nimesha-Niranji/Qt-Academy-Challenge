@@ -4,15 +4,15 @@ import QtQuick.Controls
 
 Window {
     id: root
-    width: 240
-    height: 740
+    width: 640
+    height: 480
     visible: true
-    title: qsTr("TV Remote Control")
+    title: qsTr("Working on")
 
     StackView {
         id: stackView
         anchors.fill: parent
-        initialItem: tvRemotePage
+        initialItem: practicePage
     }
 
     component ContactInfo: QtObject {
@@ -38,6 +38,142 @@ Window {
         phone: "+94710522031"
         email: "niranjikgn25@gmail.com"
         webSite: Qt.url("https://www.qt.io")
+    }
+
+
+
+    Component{
+        id: practicePage
+        Rectangle{
+            id: rectangle4
+
+            Button {
+
+                //Padding and Font
+                leftPadding: 10
+                rightPadding: 10
+                topPadding: 10
+                bottomPadding: 10
+
+                font{
+                    family: "wingdings"
+                    pixelSize: 24
+                }
+
+                contentItem: Label {
+                    text: "Click Here"
+
+                    Rectangle {
+                        anchors.fill: parent
+                        color: "red"
+                        opacity: 0.2
+                    }
+                }
+
+                ////contentItem
+                // contentItem: Label{
+                //     text: "Click Here"
+                //     font.pointSize: 24
+                //     font.bold: true
+                //     verticalAlignment: Text.AlignVCenter
+                // }
+
+                // //Background
+                // text: "Click Here"
+                // background: Rectangle{
+                //     implicitHeight: 50
+                //     implicitWidth: 300
+                //     color: parent.down ? "#d1d5db" : "#29C878"
+                // }
+
+                // //Inset
+                // text: "Click Here"
+                // topInset: -20
+                // leftInset: -20
+                // rightInset: -60
+                // bottomInset: -60
+                // background: Image{
+                //     source: "qrc:/Assets/Button-Pedal.png"
+                // }
+            }
+
+            // //Opaciy
+            // Rectangle{
+            //     height: 100
+            //     width: 100
+            //     color: "Green"
+            //     Rectangle{
+            //         height: 100
+            //         width: 100
+            //         color: "Pink"
+            //         opacity: 0.5
+            //         x:50
+            //         y:50
+            //     }
+            // }
+
+            // //Mouse Area and onClicked
+            // Rectangle{
+            //     id: re1
+            //     height: 100
+            //     width: 100
+            //     color: "Red"
+            //     MouseArea{
+            //         anchors.fill: parent
+            //         onClicked: {console.log("Red")}
+            //     }
+            // }
+
+            // Rectangle{
+            //     id: re2
+            //     anchors.left: re1.right
+            //     height: 100
+            //     width: 100
+            //     color: "green"
+            //     MouseArea{
+            //         anchors.fill: parent
+            //         onClicked: {console.log("Green")}
+            //     }
+            // }
+
+            // Rectangle {
+            //     color: "blue"
+            //     width: 200
+            //     height: 200
+
+            //     Rectangle {
+            //         color: "green"
+            //         width: 25
+            //         height: 25
+            //     }
+
+            //     Rectangle {
+            //         color: "red"
+            //         x: 25
+            //         y: 25
+            //         width: 50
+            //         height: 50
+            //         scale: 1.5
+            //         //transformOrigin: Item.TopLeft
+            //         rotation: 45
+            //     }
+            // }
+
+            Button {
+                id: nextButton
+                text: "Next"
+                anchors.bottom: parent.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                onClicked: {
+                    root.title = qsTr("TV Remote Control")    // <- Change title
+                    root.minimumWidth = 240                         // <- Change width
+                    root.minimumHeight = 740                        // <- Change height
+                    root.maximumWidth = minimumWidth
+                    root.maximumHeight = minimumHeight
+                    stackView.push(tvRemotePage)
+                }
+            }
+        }
     }
 
     Component{
@@ -143,6 +279,11 @@ Window {
                 }
             }
 
+            component KeyButton: Button1{
+                width: 47
+                height: 40
+            }
+
             QtObject {
                 id: tvControl
 
@@ -153,6 +294,7 @@ Window {
 
                 property int channelNumber: 0
                 readonly property string channelName: channelNames[channelNumber]
+                readonly property string channelNumberString: `Channel ${channelNumber.toString().padStart(2,"0")}`
 
                 // TV Features
                 property bool closedCaptionsEnabled: true
@@ -187,6 +329,11 @@ Window {
                     "Cartoons",
                     "Reality TV"
                 ]
+            }
+
+            FontLoader{
+                id: silkscreenFont
+                source: "qrc:/Fonts/Silkscreen/Silkscreen-Regular.ttf"
             }
 
             // Here we provide a suggested remote control background
@@ -241,19 +388,328 @@ Window {
                     id: lcdContentItem
                     anchors.fill: parent
                     anchors.margins: 10
+                    opacity: 0.5
+
+                    Rectangle{
+                        id: volumeIndicator
+                        width: 12
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                        border.color: "Black"
+                        border.width: 2
+                        color: "Transparent"
+
+                        Rectangle{
+                            id: volumValue
+                            width: volumeIndicator.width
+                            height: volumeIndicator.height * tvControl.volume
+                            anchors.bottom: parent.bottom
+                            anchors.right: parent.right
+                            color: "Black"
+                        }
+                    }
 
                     Text {
-                        id: chanelNo
-                        text: qsTr("CHANNEL")
+                        id: channelNoText
+                        text: tvControl.channelNumberString
                         anchors{
-                            top: lcdScreen
-                            //leftMargin: 30
+                            top: parent.top
+                            right: volumeIndicator.left
+                            left: parent.left
+                            topMargin: -8
+                            rightMargin: 4
                         }
+                        font{
+                            family: silkscreenFont.font.family
+                            pixelSize: 20
+                        }
+                    }
+
+                    Text{
+                        id: channelNameText
+                        text: tvControl.channelName
+                        anchors{
+                            top: channelNoText.bottom
+                            right: volumeIndicator.left
+                            left: parent.left
+                            rightMargin: 4
+                        }
+                        font{
+                            family: silkscreenFont.font.family
+                            pixelSize: 16
+                        }
+                    }
+
+                    Image {
+                        id: closedCaptionsIcon
+                        source: "qrc:/Image/tv/closed_caption.svg"
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        width: 32
+                        height: 32
+                        fillMode: Image.PreserveAspectFit
+                        visible: tvControl.closedCaptionsEnabled
+                    }
+
+                    Image {
+                        id: hdrIcon
+                        source: "qrc:/Image/tv/hdr_on.svg"
+                        anchors.bottom: parent.bottom
+                        anchors.left: closedCaptionsIcon.right
+                        anchors.leftMargin: 2
+                        width: 32
+                        height: 32
+                        fillMode: Image.PreserveAspectFit
+                        visible: tvControl.hdrEnabled
+                    }
+
+                    Image {
+                        id: castConnectedIcon
+                        source: "qrc:/Image/tv/cast_connected.svg"
+                        anchors.bottom: parent.bottom
+                        anchors.left: hdrIcon.right
+                        anchors.leftMargin: 2
+                        width: 32
+                        height: 32
+                        fillMode: Image.PreserveAspectFit
+                        visible: tvControl.castConnected
+                    }
+
+                    Image {
+                        id: listeningIcon
+                        source: "qrc:/Image/tv/mic.svg"
+                        anchors.bottom: parent.bottom
+                        anchors.left: castConnectedIcon.right
+                        anchors.leftMargin: 2
+                        width: 32
+                        height: 32
+                        fillMode: Image.PreserveAspectFit
+                        visible: tvControl.castConnected
+                    }
+
+                    Image {
+                        id: muteIcon
+                        source: `Image/tv/speaker${tvControl.soundOn ? "" : "_muted"}.svg`
+                        anchors.bottom: parent.bottom
+                        anchors.left: listeningIcon.right
+                        anchors.leftMargin: 2
+                        width: 32
+                        height: 32
+                        fillMode: Image.PreserveAspectFit
+                        visible: tvControl.castConnected
                     }
                 }
             }
 
+            Item {
+                id: featureButtons
+                anchors{
+                    top: lcdScreen.bottom
+                    left: parent.left
+                    right: parent.right
+                    leftMargin: 20
+                    rightMargin: 20
+                    topMargin: 20
+                }
+                height: 40
+
+                KeyButton{
+                    id: ccButton
+                    anchors.left: parent.left
+
+                    Image{
+                        source: "qrc:/Image/tv/closed_caption_white.svg"
+                        fillMode: Image.PreserveAspectFit
+                        anchors.centerIn: parent
+                        height: 24
+                        width:24
+                    }
+                }
+
+                KeyButton{
+                    id: hdrButton
+                    anchors.left: ccButton.right
+                    anchors.leftMargin: 4
+
+                    Image{
+                        source: "qrc:/Image/tv/hdr_on_white.svg"
+                        fillMode: Image.PreserveAspectFit
+                        anchors.centerIn: parent
+                        height: 24
+                        width:24
+                    }
+                }
+
+                KeyButton{
+                    id: castButton
+                    anchors.left: hdrButton.right
+                    anchors.leftMargin: 4
+
+                    Image{
+                        source: "qrc:/Image/tv/cast_white.svg"
+                        fillMode: Image.PreserveAspectFit
+                        anchors.centerIn: parent
+                        height: 24
+                        width:24
+                    }
+                }
+
+                KeyButton{
+                    id: muteButton
+                    anchors.left: castButton.right
+                    anchors.leftMargin: 4
+
+                    Image{
+                        source: "qrc:/Image/tv/speaker_muted_white.svg"
+                        fillMode: Image.PreserveAspectFit
+                        anchors.centerIn: parent
+                        height: 24
+                        width:24
+                    }
+                }
+            }
+
+            Item {
+                id: circuleFeature
+                anchors{
+                    top: featureButtons.bottom
+                    topMargin: 20
+                    horizontalCenter: parent.horizontalCenter
+                }
+                width: 200
+                height: 200
+                rotation: 45
+
+                Item {
+                    id: outerCircle
+                    anchors.fill: parent
+                    Item {
+                        id: topButton
+                        height: 100
+                        width: 100
+                        anchors.top: parent.top
+                        anchors.left: parent.left
+                        clip: true
+                        CircleButton{
+                            rotation: -45
+
+                            Image {
+                                id: settingImage
+                                source: "qrc:/Image/tv/settings.svg"
+                                anchors{
+                                    top: parent.top
+                                    topMargin: 10
+                                    horizontalCenter: parent.horizontalCenter
+                                }
+                                width: 32
+                                height: 32
+                                fillMode: Image.PreserveAspectFit
+                            }
+                        }
+                    }
+
+                    Item {
+                        id: rightButton
+                        height: 100
+                        width: 100
+                        anchors.top: parent.top
+                        anchors.right: parent.right
+                        clip: true
+                        CircleButton{
+                            rotation: -45
+                            anchors.horizontalCenter: parent.left
+
+                            Image {
+                                id: rightArrowImage
+                                source: "qrc:/Image/tv/fast_forward.svg"
+                                anchors{
+                                    right: parent.right
+                                    rightMargin: 10
+                                    verticalCenter: parent.verticalCenter
+                                }
+                                width: 32
+                                height: 32
+                                fillMode: Image.PreserveAspectFit
+                            }
+                        }
+                    }
+
+                    Item {
+                        id: bottomButton
+                        height: 100
+                        width: 100
+                        anchors.bottom: parent.bottom
+                        anchors.right: parent.right
+                        clip: true
+                        CircleButton{
+                            rotation: -45
+                            anchors.horizontalCenter: parent.left
+                            anchors.verticalCenter: parent.top
+
+                            Image {
+                                id: playImage
+                                source: "qrc:/Image/tv/play_pause.svg"
+                                anchors{
+                                    bottom: parent.bottom
+                                    bottomMargin: 10
+                                    horizontalCenter: parent.horizontalCenter
+                                }
+                                width: 32
+                                height: 32
+                                fillMode: Image.PreserveAspectFit
+                            }
+                        }
+                    }
+
+                    Item {
+                        id: leftButton
+                        height: 100
+                        width: 100
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        clip: true
+                        CircleButton{
+                            rotation: -45
+                            anchors.verticalCenter: parent.top
+
+                            Image {
+                                id: leftArrowImage
+                                source: "qrc:/Image/tv/fast_rewind.svg"
+                                anchors{
+                                    left: parent.left
+                                    leftMargin: 10
+                                    verticalCenter: parent.verticalCenter
+                                }
+                                width: 32
+                                height: 32
+                                fillMode: Image.PreserveAspectFit
+                            }
+                        }
+                    }
+                }
+
+                CircleButton{
+                    id: midSmallCircle
+                    width:100
+                    height: width
+                    anchors{
+                        centerIn: parent
+                    }
+                    Image{
+                        source: "qrc:/Image/tv/mic_white.svg"
+                        anchors.centerIn: parent
+                        fillMode: Image.PreserveAspectFit
+                        height: 48
+                        width: 48
+                    }
+                }
+            }
+
+
+
             Button {
+                id: nextButton
                 text: "Next"
                 anchors.bottom: parent.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
