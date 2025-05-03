@@ -55,5 +55,19 @@
         <file>Assets/hc/heat.svg</file>
         <file>ClimateControls.qml</file>
         <file>ZoneControls.qml</file>
+        <file>Image/rmo/light/cart_add.svg</file>
+        <file>Image/rmo/light/cart_remove.svg</file>
+        <file>Image/rmo/light/checkout.svg</file>
+        <file>Image/rmo/light/mild.svg</file>
+        <file>Image/rmo/light/very_hot.svg</file>
+        <file>Image/rmo/dark/cart_add.svg</file>
+        <file>Image/rmo/dark/cart_remove.svg</file>
+        <file>Image/rmo/dark/checkout.svg</file>
+        <file>Image/rmo/dark/mild.svg</file>
+        <file>Image/rmo/dark/very_hot.svg</file>
+        <file>Image/rmo/curry.jpg</file>
+        <file>Fonts/Kalam-Regular.ttf</file>
+        <file>MenuSelection.qml</file>
+        <file>MenuLabel.qml</file>
     </qresource>
 </RCC>

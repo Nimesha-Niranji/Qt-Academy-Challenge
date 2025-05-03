@@ -2,19 +2,26 @@ import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls
 import QtQuick.Controls.Basic
+import QtQuick.Layouts
 
 Window {
     id: root
-    width: 1280
-    height: 800
-    visible: true
-    title: qsTr("Working on")
+    // width: 640
+    // height: 480
+    // visible: true
+    // title: qsTr("Working on")
 
     StackView {
         id: stackView
         anchors.fill: parent
         // initialItem: practicePage
-        initialItem: homeControlPage
+
+        initialItem: restaurantMenuOrderingPage
+
+        // initialItem: homeControlPage
+        // initialItem: tvRemotePage //240,720
+        // initialItem: guitarPedalPage //260,380
+        // initialItem: businessCardPage //640, 360
     }
 
     component ContactInfo: QtObject {
@@ -199,68 +206,376 @@ Window {
     }
 
     Component{
+        //simple restaurant menu ordering application
+        id: restaurantMenuOrderingPage
+
+        ApplicationWindow{
+            id: appWindow2
+            width: 640
+            height: 800
+            visible: true
+            title: qsTr("Nimz Kitchen")
+
+            background: Image{
+                source: Qt.resolvedUrl("qrc:/Image/rmo/curry.jpg")
+                fillMode: Image.PreserveAspectCrop
+                opacity: 0.5
+            }
+
+            FontLoader{
+                id: kalamFont
+                source: Qt.resolvedUrl("qrc:/Fonts/Kalam-Regular.ttf")
+            }
+
+            font{
+                family: kalamFont.font.family
+                pixelSize: 20
+            }
+
+            // palette{
+            //     id: lightPalette
+            //     dark: "black"
+            //     window: "white"
+            //     windowText: "black"
+            // }
+
+            // palette: lightPalette
+
+            header: Pane{
+                padding: 8
+
+                background: Rectangle{
+                    color: "white"
+                    opacity: 0.5
+                }
+
+                palette.windowText: "Black"
+
+                Label{
+                    text: appWindow2.title
+                    anchors.centerIn: parent
+                    font.pixelSize: 30
+                }
+            }
+
+            Item{
+                id: menu
+                readonly property real totalOrderCost:
+                    starters.subtotal + mains.subtotal + slides.subtotal +
+                    breads.subtotal + tipSlider.value
+                anchors.fill: parent
+
+                Pane{
+                    anchors{
+                        top: parent.top
+                        bottom: parent.bottom
+                        left: parent.left
+                        right: parent.horizontalCenter
+                    }
+
+                    background: Rectangle{
+                        color: "white"
+                        border.color: "Black"
+                        opacity: 0.5
+                    }
+
+                    palette.windowText: "Black"
+
+                    ColumnLayout{
+                        anchors.fill: parent
+
+                        MenuSelection{
+                            id: starters
+                            title: qsTr("Starters")
+
+                            item1.name: qsTr("Onion Bhaji")
+                            item1.cost: 10
+
+                            item2.name: qsTr("Meat Samosa")
+                            item2.cost: 12
+
+                            item3.name: qsTr("Nargis Kebab")
+                            item3.cost: 16
+                        }
+
+                        MenuSelection{
+                            id: mains
+                            title: qsTr("Mains")
+
+                            item1.name: qsTr("Paneer Tikka")
+                            item1.cost: 20
+
+                            item2.name: qsTr("Lamb Bhuna")
+                            item2.cost: 25
+
+                            item3.name: qsTr("Mrugh Tikka")
+                            item3.cost: 28
+                        }
+
+                        Label{
+                            text: qsTr("Spice Level")
+                        }
+
+                        Dial{
+                            from: 0
+                            to: 100
+                            anchors.horizontalCenter: parent.horizontalCenter
+
+                            Image {
+                                id: mildSpice
+                                source: Qt.resolvedUrl("qrc:/Image/rmo/light/mild.svg")
+                                anchors{
+                                    bottom: parent.bottom
+                                    right: parent.left
+                                }
+                            }
+
+                            Image {
+                                id: hotSpice
+                                source: Qt.resolvedUrl("qrc:/Image/rmo/light/very_hot.svg")
+                                anchors{
+                                    bottom: parent.bottom
+                                    left: parent.right
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Pane{
+                    anchors{
+                        top: parent.top
+                        bottom: parent.bottom
+                        right: parent.right
+                        left: parent.horizontalCenter
+                    }
+
+                    background: Rectangle{
+                        color: "white"
+                        border.color: "Black"
+                        opacity: 0.5
+                    }
+
+                    palette.windowText: "Black"
+
+                    ColumnLayout{
+                        anchors.fill: parent
+
+                        MenuSelection{
+                            id: slides
+                            title: qsTr("Slides")
+
+                            item1.name: qsTr("Pilau Rice")
+                            item1.cost: 10
+
+                            item2.name: qsTr("Aloo Ghobi")
+                            item2.cost: 12
+
+                            item3.name: qsTr("Ahji Bhaji")
+                            item3.cost: 15
+                        }
+
+                        MenuSelection{
+                            id: breads
+                            title: qsTr("Breads")
+
+                            item1.name: qsTr("Garlic naan")
+                            item1.cost: 15
+
+                            item2.name: qsTr("Keema Naan")
+                            item2.cost: 18
+
+                            item3.name: qsTr("Naan at All")
+                            item3.cost: 1
+                        }
+
+                        Label{
+                            text: qsTr("Dining Options")
+                        }
+
+                        RowLayout{
+                            RadioButton{
+                                id: eatInRadioButton
+                                text: qsTr("Eat In")
+                            }
+
+                            RadioButton{
+                                id: takeAwayRadioButton
+                                text: qsTr("Take Away")
+                            }
+                        }
+
+                        Label{
+                            text: qsTr("Tip Amount")
+                        }
+
+                        RowLayout{
+                            Slider{
+                                id: tipSlider
+                                from: 0
+                                to: 100
+                                stepSize: 10
+                            }
+
+                            Label {
+                                id: tipTxt
+                                text: `${tipSlider.value}$`
+                            }
+                        }
+                    }
+                }
+            }
+
+            Pane{
+                id: orderProcessing
+                visible: false
+                anchors.centerIn: parent
+
+                background: Rectangle{
+                    color: "white"
+                    border.color: "Black"
+                    opacity: 0.5
+                }
+
+                palette.windowText: "Black"
+
+                height: appWindow2.height/3
+                width: appWindow2.width/2
+
+                ColumnLayout{
+                    anchors.centerIn: parent
+                    Label{
+                        text: qsTr("Processing Order: $%1").arg(menu.totalOrderCost)
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+
+                    BusyIndicator{
+                        visible: true
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+                }
+            }
+
+            Pane{
+                id: orderProcessed
+                visible: false
+                anchors.centerIn: parent
+
+                background: Rectangle{
+                    color: "white"
+                    border.color: "Black"
+                    opacity: 0.5
+                }
+
+                palette.windowText: "Black"
+
+                height: appWindow2.height/3
+                width: appWindow2.width/2
+
+                ColumnLayout{
+                    anchors.centerIn: parent
+                    Label{
+                        text: qsTr("Order Processed.")
+                        Layout.alignment: Qt.AlignHCenter
+                    }
+
+                    TapHandler{
+                        onTapped: orderProcessed.visible = false
+                    }
+                }
+            }
+
+            Timer{
+                id: orderProcessingTimer
+                interval: 2000
+                repeat: false
+                onRunningChanged: if(running){
+                                  orderProcessing.visible = true}
+                onTriggered: {
+                    orderProcessing.visible = false
+                    orderProcessed.visible = true
+                }
+            }
+
+            footer: Pane{
+                padding: 8
+
+                background: Rectangle{
+                    color: "white"
+                    opacity: 0.5
+                }
+
+                palette.windowText: "Black"
+
+                RowLayout{
+                    anchors.fill: parent
+
+                    Label{
+                        text: qsTr("Total Order Cost: $%1").arg(menu.totalOrderCost)
+                        //text: `Total Order Cost: ${totalOrderCost}`
+                    }
+
+                    Button{
+                        id: orderButton
+                        text: qsTr("Order Now")
+
+                        enabled:
+                            (menu.totalOrderCost>0)&&
+                            (eatInRadioButton.checked || takeAwayRadioButton.checked)
+
+                        onClicked: orderProcessingTimer.restart()
+                    }
+                }
+            }
+
+        }
+    }
+
+    Component{
         // Home Controls Application
         id: homeControlPage
-        Rectangle{
-            id: rectangle4
 
-            ApplicationWindow {
-                id: appWindow1
+        ApplicationWindow {
+            id: appWindow1
 
-                width: 1280
-                height: 800
-                visible: true
-                title: qsTr("Home Control Application")
-                font.pixelSize: 24
+            width: 1280
+            height: 800
+            visible: true
+            title: qsTr("Home Control Application")
+            font.pixelSize: 24
 
-                background: Image{
-                    fillMode: Image.PreserveAspectCrop
-                    source: Qt.resolvedUrl("qrc:/Assets/hc/BrushedMetal.jpg")
-                }
-
-                ClimateControls{
-                    anchors.fill: parent
-                }
-
-                // visible: true
-                // width: 400
-                // height: 400
-
-                // header: Label {
-                //     text: (view.currentItem as Page).title
-                //     horizontalAlignment: Text.AlignHCenter
-                // }
-
-                // SwipeView {
-                //     id: view
-                //     anchors.fill: parent
-
-                //     Page {
-                //         title: qsTr("Home")
-                //     }
-                //     Page {
-                //         title: qsTr("Discover")
-                //     }
-                //     Page {
-                //         title: qsTr("Activity")
-                //     }
-                // }
+            background: Image{
+                fillMode: Image.PreserveAspectCrop
+                source: Qt.resolvedUrl("qrc:/Assets/hc/BrushedMetal.jpg")
             }
 
-            Button {
-                id: nextButton
-                text: "Next"
-                anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: {
-                    root.title = qsTr("TV Remote Control")    // <- Change title
-                    root.minimumWidth = 240                         // <- Change width
-                    root.minimumHeight = 740                        // <- Change height
-                    root.maximumWidth = minimumWidth
-                    root.maximumHeight = minimumHeight
-                    stackView.push(tvRemotePage)
-                }
+            ClimateControls{
+                anchors.fill: parent
             }
+
+            // visible: true
+            // width: 400
+            // height: 400
+
+            // header: Label {
+            //     text: (view.currentItem as Page).title
+            //     horizontalAlignment: Text.AlignHCenter
+            // }
+
+            // SwipeView {
+            //     id: view
+            //     anchors.fill: parent
+
+            //     Page {
+            //         title: qsTr("Home")
+            //     }
+            //     Page {
+            //         title: qsTr("Discover")
+            //     }
+            //     Page {
+            //         title: qsTr("Activity")
+            //     }
+            // }
         }
     }
 
