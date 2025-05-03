@@ -1,18 +1,20 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls
+import QtQuick.Controls.Basic
 
 Window {
     id: root
-    width: 640
-    height: 480
+    width: 1280
+    height: 800
     visible: true
     title: qsTr("Working on")
 
     StackView {
         id: stackView
         anchors.fill: parent
-        initialItem: practicePage
+        // initialItem: practicePage
+        initialItem: homeControlPage
     }
 
     component ContactInfo: QtObject {
@@ -45,7 +47,7 @@ Window {
     Component{
         id: practicePage
         Rectangle{
-            id: rectangle4
+            id: rectangleP
 
             Button {
 
@@ -96,6 +98,26 @@ Window {
                 //     source: "qrc:/Assets/Button-Pedal.png"
                 // }
             }
+
+            // Switch {
+            //     text: "Bedroom Lights"
+            //     checked: true
+            // }
+
+            // Switch {
+            //     text: "Kitchen Lights"
+            // }
+
+            // CheckBox {
+            //     text: "Checked"
+            //     checked: true
+            // }
+
+            // CheckBox {
+            //     text: "Partially Checked"
+            //     tristate: true
+            //     checkState: Qt.PartiallyChecked
+            // }
 
             // //Opaciy
             // Rectangle{
@@ -158,6 +180,72 @@ Window {
             //         rotation: 45
             //     }
             // }
+
+            Button {
+                id: nextButton
+                text: "Next"
+                anchors.bottom: parent.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                onClicked: {
+                    root.title = qsTr("TV Remote Control")    // <- Change title
+                    root.minimumWidth = 240                         // <- Change width
+                    root.minimumHeight = 740                        // <- Change height
+                    root.maximumWidth = minimumWidth
+                    root.maximumHeight = minimumHeight
+                    stackView.push(tvRemotePage)
+                }
+            }
+        }
+    }
+
+    Component{
+        // Home Controls Application
+        id: homeControlPage
+        Rectangle{
+            id: rectangle4
+
+            ApplicationWindow {
+                id: appWindow1
+
+                width: 1280
+                height: 800
+                visible: true
+                title: qsTr("Home Control Application")
+                font.pixelSize: 24
+
+                background: Image{
+                    fillMode: Image.PreserveAspectCrop
+                    source: Qt.resolvedUrl("qrc:/Assets/hc/BrushedMetal.jpg")
+                }
+
+                ClimateControls{
+                    anchors.fill: parent
+                }
+
+                // visible: true
+                // width: 400
+                // height: 400
+
+                // header: Label {
+                //     text: (view.currentItem as Page).title
+                //     horizontalAlignment: Text.AlignHCenter
+                // }
+
+                // SwipeView {
+                //     id: view
+                //     anchors.fill: parent
+
+                //     Page {
+                //         title: qsTr("Home")
+                //     }
+                //     Page {
+                //         title: qsTr("Discover")
+                //     }
+                //     Page {
+                //         title: qsTr("Activity")
+                //     }
+                // }
+            }
 
             Button {
                 id: nextButton

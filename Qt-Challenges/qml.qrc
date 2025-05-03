@@ -47,5 +47,13 @@
         <file>Image/tv/volume_up.svg</file>
         <file>Fonts/Silkscreen/Silkscreen-Bold.ttf</file>
         <file>Fonts/Silkscreen/Silkscreen-Regular.ttf</file>
+        <file>Assets/hc/BrushedMetal.jpg</file>
+        <file>Assets/hc/cool.svg</file>
+        <file>Assets/hc/fan_fill.svg</file>
+        <file>Assets/hc/fan_off.svg</file>
+        <file>Assets/hc/fan_outline.svg</file>
+        <file>Assets/hc/heat.svg</file>
+        <file>ClimateControls.qml</file>
+        <file>ZoneControls.qml</file>
     </qresource>
 </RCC>
