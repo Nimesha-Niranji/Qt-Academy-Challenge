@@ -69,5 +69,15 @@
         <file>Fonts/Kalam-Regular.ttf</file>
         <file>MenuSelection.qml</file>
         <file>MenuLabel.qml</file>
+        <file>Assets/ga/image0.jpg</file>
+        <file>Assets/ga/image1.jpg</file>
+        <file>Assets/ga/image2.jpg</file>
+        <file>Assets/ga/image3.jpg</file>
+        <file>Assets/ga/image4.jpg</file>
+        <file>Assets/ga/image5.jpg</file>
+        <file>Assets/ga/image6.jpg</file>
+        <file>Assets/ga/image7.jpg</file>
+        <file>Assets/ga/image8.jpg</file>
+        <file>Assets/ga/image9.jpg</file>
     </qresource>
 </RCC>

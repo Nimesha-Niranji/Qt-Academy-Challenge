@@ -6,18 +6,18 @@ import QtQuick.Layouts
 
 Window {
     id: root
-    // width: 640
-    // height: 480
+    // width: 1280
+    // height: 800
     // visible: true
     // title: qsTr("Working on")
 
     StackView {
         id: stackView
         anchors.fill: parent
-        // initialItem: practicePage
-
-        initialItem: restaurantMenuOrderingPage
-
+        //initialItem: practicePage
+        initialItem: fickableGalareyPage
+        //initialItem: galareyPage
+        //initialItem: restaurantMenuOrderingPage
         // initialItem: homeControlPage
         // initialItem: tvRemotePage //240,720
         // initialItem: guitarPedalPage //260,380
@@ -53,31 +53,188 @@ Window {
 
     Component{
         id: practicePage
-        Rectangle{
-            id: rectangleP
+        ApplicationWindow{
+            //id: rectangleP //for Rectangle
+            id: window
 
-            Button {
+            width: 640
+            height: 300
+            visible: true
+            title: `LayoutItemProxy Example`
 
-                //Padding and Font
-                leftPadding: 10
-                rightPadding: 10
-                topPadding: 10
-                bottomPadding: 10
+            readonly property bool useRowLayout: window.width > 320
 
-                font{
-                    family: "wingdings"
-                    pixelSize: 24
-                }
+            Image {
+                id: image1
+                source: "qrc:/Assets/ga/image0.jpg"
+                fillMode: Image.PreserveAspectCrop
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+            }
 
-                contentItem: Label {
-                    text: "Click Here"
+            Image {
+                id: image2
+                source: "qrc:/Assets/ga/image1.jpg"
+                fillMode: Image.PreserveAspectCrop
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+            }
 
-                    Rectangle {
-                        anchors.fill: parent
-                        color: "red"
-                        opacity: 0.2
-                    }
-                }
+            RowLayout {
+                visible: window.useRowLayout
+                anchors.fill: parent
+
+                LayoutItemProxy { target: image1 }
+                LayoutItemProxy { target: image2 }
+            }
+
+            ColumnLayout {
+                visible: !window.useRowLayout
+                anchors.fill: parent
+
+                LayoutItemProxy { target: image1 }
+                LayoutItemProxy { target: image2 }
+            }
+
+            // Flickable{
+            //     anchors.fill: parent
+            //     contentWidth: img1.width
+            //     contentHeight: img1.height
+            //     Image {
+            //         id: img1
+            //         source: "qrc:/Assets/ga/image0.jpg"
+            //     }
+            // }
+
+            // Component{
+            //     id: imageSet
+
+            //     Image {
+            //         id: image
+            //         required property int index
+            //         source: Qt.resolvedUrl(`qrc:/Assets/ga/image${index}.jpg`)
+            //         asynchronous: true
+            //         height: 100
+            //         width: 100
+
+            //         Text {
+            //             text: image.index
+            //             font.pixelSize: 30
+            //             anchors.centerIn: parent
+            //             color: "white"
+            //             style: Text.Outline
+            //             styleColor: "Black"
+            //         }
+
+            //         Rectangle{
+            //             anchors.fill: parent
+            //             color: "transparent"
+            //             border{
+            //                 width: 5
+            //                 color: image.Positioner.isFirstItem ?
+            //                            "red" : image.Positioner.isLastItem ?
+            //                                "green" : "transparent"
+            //             }
+            //         }
+            //     }
+            // }
+
+            // Flow{
+            //     spacing: 10
+            //     padding: 10
+            //     anchors.fill: parent
+            //     layoutDirection: Qt.RightToLeft
+            //     flow:Flow.TopToBottom
+            //     Repeater{
+            //         model: 10
+            //         delegate: imageSet
+            //     }
+            // }
+
+            // Grid{
+            //     spacing: 10
+            //     padding: 10
+            //     //rows: 4
+            //     columns: 6
+            //     columnSpacing: 20
+            //     rowSpacing: 25
+            //     Repeater{
+            //         model: 10
+            //         delegate: imageSet
+            //     }
+            // }
+
+            // Row{ //for Row,Column
+            //     spacing: 10
+            //     padding: 10
+            //     anchors.centerIn: parent
+            //     Repeater{
+            //         model: 10
+            //         delegate: imageSet
+            //     }
+            // }
+
+            // Component {
+            //     id: redSquare
+
+            //     Rectangle {
+            //         width: 100
+            //         height: 100
+            //         //color: "red"
+            //         color: Positioner.isFirstItem ? "yellowgreen" : "red"
+            //         border.color: "black"
+            //     }
+            // }
+
+            // Column {
+            //     anchors.centerIn: parent
+
+            //     Repeater {
+            //         model: 3
+            //         delegate: redSquare
+            //     }
+            // }
+
+            // Component{
+            //     id: number
+            //     Text{
+            //         required property int index
+            //         text: `${index}`
+            //         font.pixelSize: 40
+            //         color: "Black"
+            //     }
+            // }
+
+            // Column{
+            //     anchors.centerIn: parent
+            //     Repeater{
+            //         model: 3
+            //         delegate: number
+            //     }
+            // }
+
+            // Button {
+
+            //     //Padding and Font
+            //     leftPadding: 10
+            //     rightPadding: 10
+            //     topPadding: 10
+            //     bottomPadding: 10
+
+            //     font{
+            //         family: "wingdings"
+            //         pixelSize: 24
+            //     }
+
+            //     contentItem: Label {
+            //         text: "Click Here"
+
+            //         Rectangle {
+            //             anchors.fill: parent
+            //             color: "red"
+            //             opacity: 0.2
+            //         }
+            //     }
 
                 ////contentItem
                 // contentItem: Label{
@@ -104,7 +261,7 @@ Window {
                 // background: Image{
                 //     source: "qrc:/Assets/Button-Pedal.png"
                 // }
-            }
+            // }
 
             // Switch {
             //     text: "Bedroom Lights"
@@ -188,18 +345,372 @@ Window {
             //     }
             // }
 
-            Button {
-                id: nextButton
-                text: "Next"
-                anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: {
-                    root.title = qsTr("TV Remote Control")    // <- Change title
-                    root.minimumWidth = 240                         // <- Change width
-                    root.minimumHeight = 740                        // <- Change height
-                    root.maximumWidth = minimumWidth
-                    root.maximumHeight = minimumHeight
-                    stackView.push(tvRemotePage)
+            // Button {
+            //     id: nextButton
+            //     text: "Next"
+            //     anchors.bottom: parent.bottom
+            //     anchors.horizontalCenter: parent.horizontalCenter
+            //     onClicked: {
+            //         root.title = qsTr("TV Remote Control")    // <- Change title
+            //         root.minimumWidth = 240                         // <- Change width
+            //         root.minimumHeight = 740                        // <- Change height
+            //         root.maximumWidth = minimumWidth
+            //         root.maximumHeight = minimumHeight
+            //         stackView.push(tvRemotePage)
+            //     }
+            // }
+        }
+    }
+
+    Component{
+        id: fickableGalareyPage
+
+        ApplicationWindow{
+            id: appWindow4
+            width: 1280
+            height: 800
+            visible: true
+            title: qsTr("My Galary")
+
+            color: "black"
+            palette.windowText: "white"
+
+            property int currentImageIndex: 0
+
+            readonly property int tabletBreakpoint: 1000
+            readonly property int mobileBreakpoint: 600
+            readonly property bool isDesltopLayout: appWindow4.width > tabletBreakpoint
+            readonly property bool isTabletLayout: appWindow4.width <= tabletBreakpoint && appWindow4.width > mobileBreakpoint
+            readonly property bool isMobileLayout: appWindow4.width <= mobileBreakpoint
+
+            Component{
+                id: thumbnailDelegate
+
+                Image{
+                    id: thumbnail
+                    required property int index
+                    source: Qt.resolvedUrl(`qrc:/Assets/ga/image${index}.jpg`)
+                    asynchronous: true
+
+                    height: 100
+                    width: 100
+
+                    // Layout.preferredHeight: 100
+                    // Layout.preferredWidth: 100
+
+                    Rectangle{
+                        anchors.fill: parent
+                        color: "transparent"
+                        border{
+                            color: "white"
+                            width: appWindow3.currentImageIndex === thumbnail.index ?
+                                       2 : 0
+                        }
+                    }
+
+                    Label{
+                        text: thumbnail.index
+                        anchors.centerIn: parent
+                        font.pixelSize: 30
+                        style: Text.Outline
+                        styleColor: "black"
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: appWindow3.currentImageIndex = thumbnail.index
+                    }
+                }
+            }
+
+            Flickable{
+                id: flickable
+                anchors.fill: parent
+                contentHeight: gridLayout.height
+                contentWidth: gridLayout.width
+
+                clip: true
+
+                // Layout.fillHeight: true
+                // Layout.preferredWidth: gridLayout.width
+
+                Grid{
+                    id: gridLayout
+                    columns: appWindow4.isDesltopLayout ? 2 : appWindow4.isTabletLayout ? 1 : -1
+                    rows: appWindow4.isMobileLayout ? 1 : -1
+
+                    Repeater{
+                        model: 10
+                        delegate: thumbnailDelegate
+                    }
+                }
+            }
+
+            Image {
+                id: selectImage
+
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+
+                source: Qt.resolvedUrl(`qrc:/Assets/ga/image${currentImageIndex}.jpg`)
+                asynchronous: true
+            }
+
+            Label{
+                id: sourceTitle
+                text: qsTr("Source")
+            }
+            Label{
+                id: sourceValue
+                text: selectImage.source
+                font.bold: true
+            }
+
+            Label{
+                id: widthTitle
+                text: qsTr("Width")
+            }
+            Label{
+                id: widthValue
+                text: selectImage.sourceSize.width
+                font.bold: true
+            }
+
+            Label{
+                id: heightTitle
+                text: qsTr("Height")
+            }
+            Label{
+                id: heightValue
+                text: selectImage.sourceSize.height
+                font.bold: true
+            }
+
+            Label{
+                id: paintedWidthTitle
+                text: qsTr("Printed Width")
+            }
+            Label{
+                id: paintedWidthValue
+                text: selectImage.paintedWidth
+                font.bold: true
+            }
+
+            Label{
+                id: paintedHeightTitle
+                text: qsTr("Printed Height")
+            }
+            Label{
+                id: paintedHeightValue
+                text: selectImage.paintedHeight
+                font.bold: true
+            }
+
+            RowLayout{
+                //Desktop layout
+                visible: appWindow4.isDesltopLayout
+                anchors.fill: parent
+                anchors.margins: 5
+
+                LayoutItemProxy{
+                    target: flickable
+                    Layout.fillHeight: true
+                    //Layout.preferredWidth: gridLayout.width
+                    width: gridLayout.width
+                }
+            }
+
+            ColumnLayout{
+                LayoutItemProxy{
+                    target: selectImage
+                }
+
+                RowLayout{
+                    Layout.minimumWidth: 40
+
+                    LayoutItemProxy{
+                        target: sourceTitle
+                    }
+                    LayoutItemProxy{
+                        target: sourceValue
+                    }
+
+                    LayoutItemProxy{
+                        target: widthTitle
+                    }
+                    LayoutItemProxy{
+                        target: widthValue
+                    }
+
+                    LayoutItemProxy{
+                        target: heightTitle
+                    }
+                    LayoutItemProxy{
+                        target: heightValue
+                    }
+
+                    LayoutItemProxy{
+                        target: paintedWidthTitle
+                    }
+                    LayoutItemProxy{
+                        target: paintedWidthValue
+                    }
+
+                    LayoutItemProxy{
+                        target: paintedHeigtTitle
+                    }
+                    LayoutItemProxy{
+                        target: paintedHeightValue
+                    }
+                }
+            }
+
+        }
+    }
+
+    Component{
+        id: galareyPage
+
+        ApplicationWindow{
+            id: appWindow3
+            width: 1280
+            height: 800
+            visible: true
+            title: qsTr("My Galary")
+
+            color: "black"
+            palette.windowText: "white"
+
+            property int currentImageIndex: 0
+
+            Component{
+                id: thumbnailDelegate
+
+                Image{
+                    id: thumbnail
+                    required property int index
+                    source: Qt.resolvedUrl(`qrc:/Assets/ga/image${index}.jpg`)
+                    asynchronous: true
+
+                    height: 100
+                    width: 100
+
+                    // Layout.preferredHeight: 100
+                    // Layout.preferredWidth: 100
+
+                    Rectangle{
+                        anchors.fill: parent
+                        color: "transparent"
+                        border{
+                            color: "white"
+                            width: appWindow3.currentImageIndex === thumbnail.index ?
+                                       2 : 0
+                        }
+                    }
+
+                    Label{
+                        text: thumbnail.index
+                        anchors.centerIn: parent
+                        font.pixelSize: 30
+                        style: Text.Outline
+                        styleColor: "black"
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: appWindow3.currentImageIndex = thumbnail.index
+                    }
+                }
+            }
+
+            RowLayout{
+                anchors.fill: parent
+                anchors.margins: 5
+
+                Flickable{
+                    id: flickable
+                    anchors.fill: parent
+                    contentHeight: gridLayout.height
+                    contentWidth: gridLayout.width
+
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: gridLayout.width
+
+                    Grid{
+                        id: gridLayout
+                        columns: 2
+
+                        Repeater{
+                            model: 10
+                            delegate: thumbnailDelegate
+                        }
+                    }
+                }
+
+                ColumnLayout{
+                    Image {
+                        id: selectImage
+
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+
+                        source: Qt.resolvedUrl(`qrc:/Assets/ga/image${currentImageIndex}.jpg`)
+                        asynchronous: true
+                    }
+
+                    RowLayout{
+                        Layout.minimumWidth: 40
+
+                        Label{
+                            id: sourceTitle
+                            text: qsTr("Source")
+                        }
+                        Label{
+                            id: sourceValue
+                            text: selectImage.source
+                            font.bold: true
+                        }
+
+                        Label{
+                            id: widthTitle
+                            text: qsTr("Width")
+                        }
+                        Label{
+                            id: widthValue
+                            text: selectImage.sourceSize.width
+                            font.bold: true
+                        }
+
+                        Label{
+                            id: heightTitle
+                            text: qsTr("Height")
+                        }
+                        Label{
+                            id: heightValue
+                            text: selectImage.sourceSize.height
+                            font.bold: true
+                        }
+
+                        Label{
+                            id: paintedWidthTitle
+                            text: qsTr("Printed Width")
+                        }
+                        Label{
+                            id: paintedWidthValue
+                            text: selectImage.paintedWidth
+                            font.bold: true
+                        }
+
+                        Label{
+                            id: paintedHeightTitle
+                            text: qsTr("Printed Height")
+                        }
+                        Label{
+                            id: paintedHeightValue
+                            text: selectImage.paintedHeight
+                            font.bold: true
+                        }
+                    }
                 }
             }
         }
