@@ -3,6 +3,7 @@ import QtQuick.Window 2.12
 import QtQuick.Controls
 import QtQuick.Controls.Basic
 import QtQuick.Layouts
+import Qt.labs.folderlistmodel
 
 Window {
     id: root
@@ -14,8 +15,9 @@ Window {
     StackView {
         id: stackView
         anchors.fill: parent
-        //initialItem: practicePage
-        initialItem: fickableGalareyPage
+
+        initialItem: practicePage
+        //initialItem: fickableGalareyPage
         //initialItem: galareyPage
         //initialItem: restaurantMenuOrderingPage
         // initialItem: homeControlPage
@@ -57,44 +59,400 @@ Window {
             //id: rectangleP //for Rectangle
             id: window
 
-            width: 640
-            height: 300
+            width: 800
+            height: 480
             visible: true
-            title: `LayoutItemProxy Example`
+            title: `Model View Delegate Practice`
 
-            readonly property bool useRowLayout: window.width > 320
-
-            Image {
-                id: image1
-                source: "qrc:/Assets/ga/image0.jpg"
-                fillMode: Image.PreserveAspectCrop
-                Layout.fillHeight: true
-                Layout.fillWidth: true
+            color: "black"
+            palette {
+                windowText: "white"
             }
 
-            Image {
-                id: image2
-                source: "qrc:/Assets/ga/image1.jpg"
-                fillMode: Image.PreserveAspectCrop
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-            }
+            //Model View Delegate Practice
 
-            RowLayout {
-                visible: window.useRowLayout
+            //Example 8 - Combo Box
+            Pane{
                 anchors.fill: parent
+                padding: 8
+                background: null
 
-                LayoutItemProxy { target: image1 }
-                LayoutItemProxy { target: image2 }
+                ListModel{
+                    id: locationModel
+                    ListElement{
+                        locationText: "Colombo"
+                        weatherRequest: "GET Weather for Colombo"
+                    }
+                    ListElement{
+                        locationText: "Kurunegala"
+                        weatherRequest: "GET Weather for Kurunegala"
+                    }
+                    ListElement{
+                        locationText: "Badulla"
+                        weatherRequest: "GET Weather for Badulla"
+                    }
+                    ListElement{
+                        locationText: "Galle"
+                        weatherRequest: "GET Weather for Galle"
+                    }
+                    ListElement{
+                        locationText: "Jaffna"
+                        weatherRequest: "GET Weather for Jaffna"
+                    }
+                }
+
+                ComboBox{
+                    id: locationComboBox
+                    model: locationModel
+                    Layout.preferredWidth: window.width/2
+                    textRole: "locationText"
+                    valueRole: "weatherRequest"
+
+                    onActivated: console.log(locationComboBox.currentText, locationComboBox.currentValue)
+                }
             }
 
-            ColumnLayout {
-                visible: !window.useRowLayout
-                anchors.fill: parent
+            //Example 7 - ListModel and ListElement
+            // ListModel{
+            //     id: listModel
+            //     ListElement{
+            //         time: "2025-01-05"
+            //         weather_code: 0
+            //         temp_max: 21
+            //         temp_min: 5
+            //         unit: "ºC"
+            //     }
 
-                LayoutItemProxy { target: image1 }
-                LayoutItemProxy { target: image2 }
-            }
+            //     ListElement{
+            //         time: "2025-02-05"
+            //         weather_code: 1
+            //         temp_max: 30
+            //         temp_min: 1
+            //         unit: "ºC"
+            //     }
+
+            //     ListElement{
+            //         time: "2025-03-05"
+            //         weather_code: 2
+            //         temp_max: 24
+            //         temp_min: 10
+            //         unit: "ºC"
+            //     }
+            // }
+
+            // Component.onCompleted: append({
+            //                                       "time": "2024-06-13",
+            //                                       "weather_code": 95,
+            //                                       "temp_max": 21,
+            //                                       "temp_min": 9,
+            //                                       "units": "ºC"
+            //                                   })
+
+            //Example 6 - FolderListModel(Built-In Models)
+
+            // Pane{
+            //     anchors.fill: parent
+            //     padding: 8
+
+            //     background: null
+
+            //     ColumnLayout{
+            //         anchors.fill: parent
+
+            //         FolderListModel{
+            //             id: folderList
+            //             folder: Qt.resolvedUrl(`qrc:/Assets/wa/icons/`)
+            //             nameFilters: ["*.svg"]
+            //         }
+
+            //         GridView{
+            //             id: grid1
+            //             Layout.fillHeight: true
+            //             Layout.fillWidth: true
+
+            //             model: folderList
+
+            //             cellWidth: 100
+            //             cellHeight: 100
+
+            //             delegate: Rectangle{
+            //                 id: delegate1
+
+            //                 required property url fileUrl
+            //                 required property string fileBaseName
+
+            //                 color: "transparent"
+            //                 border.color: "white"
+
+            //                 width: grid1.cellWidth
+            //                 height: grid1.cellHeight
+
+            //                 Rectangle{
+            //                     anchors.fill: columnLayout
+            //                     color: "transparent"
+            //                     border.color: "red"
+            //                 }
+
+            //                 ColumnLayout{
+            //                     id: columnLayout
+            //                     anchors.centerIn: parent
+
+            //                     Image{
+            //                         source: delegate1.fileUrl
+            //                         Layout.fillWidth: true
+            //                         horizontalAlignment: Qt.AlignHCenter
+            //                         fillMode: Image.PreserveAspectCrop
+            //                     }
+
+            //                     Label{
+            //                         text: delegate1.fileBaseName
+            //                         horizontalAlignment: Qt.AlignHCenter
+            //                         Layout.fillWidth: true
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+
+            // FolderListModel{
+            //     id: folderList
+            //     folder: Qt.resolvedUrl(`qrc:/Assets/wa/`)
+            //     nameFilters: [`*.jpg`]
+            // }
+
+            // ColumnLayout{
+            //     spacing: 8
+
+            //     Repeater{
+            //         model: folderList
+            //         delegate: Label{
+            //             required property string fileName
+            //             text: `${fileName}`
+            //         }
+            //     }
+            // }
+
+            //Example5 - Animation
+            // Image{
+            //     source: "qrc:/Assets/wa/sunny.jpg"
+
+            //     NumberAnimation on scale{
+            //         duration: 1500
+            //         easing.type: Easing.InOutCubic
+            //         from: 0
+            //         to: 1
+            //     }
+
+            //     NumberAnimation on rotation {
+            //         duration: 1500
+            //         easing.type: Easing.InOutCubic
+            //         from: 90
+            //         to: 0
+            //     }
+            // }
+
+            //Example 4 - Transition
+            // ListView{
+            //     Layout.fillWidth: true
+            //     Layout.margins: 12
+            //     Layout.minimumHeight: 50
+            //     delegate: weatherInfo
+            //     model: app.weatherData
+            //     orientation: ListView.Horizontal
+            //     spacing: 12
+
+            //     populate: Transition {
+            //         NumberAnimation{
+            //             properties: "scale"
+            //             duration: 1000
+            //             easing.type: Easing.InOutCubic
+            //             from: 0
+            //             to: 1
+            //         }
+            //     }
+            // }
+
+            // RowLayout{
+            //     id: weatherInfo
+
+            //     required property string day
+            //     required property real temp
+            //     required property string condition
+
+            //     Image{
+            //         source: `qrc:/Assets/wa/${weatherInfo.condition}.jpg`
+            //         Layout.preferredHeight: 100
+            //         Layout.preferredWidth: 100
+            //     }
+
+            //     ColumnLayout{
+            //         Label{
+            //             text: weatherInfo.day
+            //         }
+            //         Label{
+            //             text: `${weatherInfo.temp}\u00B0C` //\u00B0 for degree º symbol
+            //         }
+            //     }
+            // }
+
+            //Example 3
+            // Repeater{
+            //     model: [{"day":"Monday", "temp":25, "condition":"sunny"}]
+
+            //     RowLayout{
+            //         id: weatherInfo
+
+            //         required property string day
+            //         required property real temp
+            //         required property string condition
+
+            //         Image{
+            //             source: `qrc:/Assets/wa/${weatherInfo.condition}.jpg`
+            //             Layout.preferredHeight: 100
+            //             Layout.preferredWidth: 100
+            //         }
+
+            //         ColumnLayout{
+            //             Label{
+            //                 text: weatherInfo.day
+            //             }
+            //             Label{
+            //                 text: `${weatherInfo.temp}\u00B0C` //\u00B0 for degree º symbol
+            //             }
+            //         }
+            //     }
+            // }
+
+            //Example 2
+            // Component{
+            //     id: weatherCondition
+            //     RowLayout{
+            //         id: conditionLayout
+            //         required property string modelData
+            //         spacing: 10
+
+            //         Image {
+            //             source: `qrc:/Assets/wa/${conditionLayout.modelData}.jpg`
+            //             Layout.preferredHeight: 100
+            //             Layout.preferredWidth: 100
+            //         }
+
+            //         Label{
+            //             text: conditionLayout.modelData
+            //         }
+            //     }
+            // }
+
+            // ListView{
+            //     anchors.fill: parent
+
+            //     model:  ["sunny", "cloudy", "rainy"]
+            //     delegate: weatherCondition
+            // }
+
+            //Example 1
+            // ListView{
+            //     anchors.fill: parent
+
+            //     model: ["Sunny", "Cloudy", "Rainy"]
+
+            //     delegate: Label{
+            //         required property string modelData
+            //         text: modelData
+            //     }
+            // }
+
+            // ListView {
+            //     anchors.fill: parent
+            //     model: ["sunny", "cloudy", "rainy"]
+            //     delegate: Label {
+            //         required property string modelData
+            //         required property int index
+
+            //         text: `${index + 1}. ${modelData}`
+            //     }
+            // }
+
+            // ColumnLayout {
+            //     anchors.fill: parent
+
+            //     Repeater {
+            //         // a JSON array as a model
+            //         model: ["red", "green", "blue", "cyan", "yellow", "magenta",
+            //                 "white", "black"]
+
+            //         delegate: Label {
+            //             id: labelDelegate // Used to qualify modelData within Rectangle
+
+            //             required property string modelData // Color *string* values
+            //             required property int index // the indices (rows)
+
+            //             Layout.fillWidth: true
+
+            //             text: `modelData: ${modelData}, index: ${index}`
+
+            //             background: Rectangle {
+            //                 // Qualified access to modelData to get color.
+            //                 color: Qt.color(labelDelegate.modelData)
+            //             }
+            //         }
+            //     }
+            // }
+
+            // ListView {
+            //     anchors.fill: parent
+            //     model: [
+            //         { "month": "August", "temp": 20, "color": "darkorange" },
+            //         { "month": "September", "temp": 10, "color": "deepskyblue" },
+            //         { "month": "October", "temp": 0, "color": "lightskyblue" }
+            //     ]
+
+            //     delegate: Label {
+            //         id: label1
+            //         required property string month
+            //         required property int temp
+            //         required color
+
+            //         text: `${month}: ${temp}°C`
+            //     }
+            // }
+
+            //LayoutItemProxy practice
+
+            // readonly property bool useRowLayout: window.width > 320
+
+            // Image {
+            //     id: image1
+            //     source: "qrc:/Assets/ga/image0.jpg"
+            //     fillMode: Image.PreserveAspectCrop
+            //     Layout.fillHeight: true
+            //     Layout.fillWidth: true
+            // }
+
+            // Image {
+            //     id: image2
+            //     source: "qrc:/Assets/ga/image1.jpg"
+            //     fillMode: Image.PreserveAspectCrop
+            //     Layout.fillHeight: true
+            //     Layout.fillWidth: true
+            // }
+
+            // RowLayout {
+            //     visible: window.useRowLayout
+            //     anchors.fill: parent
+
+            //     LayoutItemProxy { target: image1 }
+            //     LayoutItemProxy { target: image2 }
+            // }
+
+            // ColumnLayout {
+            //     visible: !window.useRowLayout
+            //     anchors.fill: parent
+
+            //     LayoutItemProxy { target: image1 }
+            //     LayoutItemProxy { target: image2 }
+            // }
 
             // Flickable{
             //     anchors.fill: parent
@@ -515,8 +873,7 @@ Window {
                 LayoutItemProxy{
                     target: flickable
                     Layout.fillHeight: true
-                    //Layout.preferredWidth: gridLayout.width
-                    width: gridLayout.width
+                    Layout.preferredWidth: gridLayout.width
                 }
             }
 

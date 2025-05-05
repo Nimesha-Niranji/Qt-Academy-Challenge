@@ -79,5 +79,36 @@
         <file>Assets/ga/image7.jpg</file>
         <file>Assets/ga/image8.jpg</file>
         <file>Assets/ga/image9.jpg</file>
+        <file>Assets/wa/cloudy.jpg</file>
+        <file>Assets/wa/rainy.jpg</file>
+        <file>Assets/wa/sunny.jpg</file>
+        <file>Assets/wa/icons/icon0.svg</file>
+        <file>Assets/wa/icons/icon1.svg</file>
+        <file>Assets/wa/icons/icon2.svg</file>
+        <file>Assets/wa/icons/icon3.svg</file>
+        <file>Assets/wa/icons/icon45.svg</file>
+        <file>Assets/wa/icons/icon48.svg</file>
+        <file>Assets/wa/icons/icon51.svg</file>
+        <file>Assets/wa/icons/icon53.svg</file>
+        <file>Assets/wa/icons/icon55.svg</file>
+        <file>Assets/wa/icons/icon56.svg</file>
+        <file>Assets/wa/icons/icon57.svg</file>
+        <file>Assets/wa/icons/icon61.svg</file>
+        <file>Assets/wa/icons/icon63.svg</file>
+        <file>Assets/wa/icons/icon65.svg</file>
+        <file>Assets/wa/icons/icon66.svg</file>
+        <file>Assets/wa/icons/icon67.svg</file>
+        <file>Assets/wa/icons/icon70.svg</file>
+        <file>Assets/wa/icons/icon73.svg</file>
+        <file>Assets/wa/icons/icon75.svg</file>
+        <file>Assets/wa/icons/icon77.svg</file>
+        <file>Assets/wa/icons/icon80.svg</file>
+        <file>Assets/wa/icons/icon81.svg</file>
+        <file>Assets/wa/icons/icon82.svg</file>
+        <file>Assets/wa/icons/icon85.svg</file>
+        <file>Assets/wa/icons/icon86.svg</file>
+        <file>Assets/wa/icons/icon95.svg</file>
+        <file>Assets/wa/icons/icon96.svg</file>
+        <file>Assets/wa/icons/icon99.svg</file>
     </qresource>
 </RCC>
